@@ -23,7 +23,6 @@ const combinaçao=[
 function jogar (id){
     const celula = document.getElementById(id);
    turno = checar_turno ? jogador_x : jogador_o;
-   checar_turno=!checar_turno;
     celula.textContent = turno;
     celula.classList.add(turno);
 
@@ -41,23 +40,52 @@ function checar_ganhador(turno){
     if(vencedor){
         encerrar_jogo(turno);
     }
-    else if(checar_empate){
+    else if(checar_empate()){
         encerrar_jogo();
     }
+    else{
+        checar_turno=!checar_turno;
+    }
 } //fim da função checar_ganhador
-function checar_empate(){
-    return false
-} 
+function checar_empate(){ 
+    let x=0;
+    let o=0;
+ 
+    for(index in celulas){
+        if(!isNaN(index)){
+             if(celulas[index].classList.contains("jogador_x")){
+             x++;
+              }
+              
+             if(celulas[index].classList.contains("jogador_o")){
+                 o++;
+             } 
+        }
+    }
 
- function encerrar_jogo(vencedor=null){
-        if(vencedor){
-            console.log(vencedor + " venceu ");
-        }
-           else{
-            console.log("Empate");
-           
-           }
-            
-        }
-        
+   return x+o=== 9 ? true : false;
+}
+
+ function encerrar_jogo(vencedor=null){ 
+    let tela = document.getElementById("tela-escura");
+    let h2 = document.createElement("h2");
+    let h3 = document.createElement("h3");
+    let mensagem= null
     
+    tela.style.display="block";
+    tela.appendChild(h2);
+    tela.appendChild(h3);
+
+    if(vencedor){
+        h2.innerHTML=`O jogador <span> ${vencedor}</span> ganhou!`;
+    }
+    else{
+        h2.innerHTML= `O jogo empatou!`;
+        }
+    comecar(()=>{
+        tela.style.display="none";
+        tela.innerHTML="";
+    });
+setTimeout(comecar,100);
+};
+
