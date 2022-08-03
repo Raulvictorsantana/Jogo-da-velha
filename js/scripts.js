@@ -1,13 +1,9 @@
 let celulas = document.querySelectorAll(".celula");
-let checar_turno= true;
+
 const jogador_x="x"
 const jogador_o="O"
 
-document.addEventListener('click', (e)=>{
- if(e.target.matches('.celula')){
-    jogar(e.target.id);
-}
-});
+
 const combinaçao=[
     [0,1,2],
     [3,4,5],
@@ -19,6 +15,34 @@ const combinaçao=[
     [2,4,6]
 
 ]
+document.addEventListener('click', (e)=>{
+    if(e.target.matches('.celula')){
+       jogar(e.target.id);
+       bot();
+   }
+   });
+
+   
+   function bot(){ 
+    const posicaoDisponivel=[];
+    for (index in celulas){
+        if(!isNaN(index)){
+            if(!celulas[index].classList.contains("X") &&
+               !celulas[index].classList.contains("O")
+            ){
+                posicaoDisponivel.push(index);
+             }
+        }
+    }
+    const aleatorio = Math.floor(
+        
+    Math.random()*posicaoDisponivel.length
+    
+    );
+ 
+     jogar (posicaoDisponivel[aleatorio],jogador_o);
+
+};
 
 function jogar (id){
     const celula = document.getElementById(id);
@@ -29,6 +53,7 @@ function jogar (id){
     checar_ganhador(turno);
 
 }
+
 
 function checar_ganhador(turno){
     const vencedor = combinaçao.some((comb)=>{
@@ -43,10 +68,9 @@ function checar_ganhador(turno){
     else if(checar_empate()){
         encerrar_jogo();
     }
-    else{
-        checar_turno=!checar_turno;
-    }
-} //fim da função checar_ganhador
+
+}
+ //fim da função checar_ganhador
 function checar_empate(){ 
     let x=0;
     let o=0;
@@ -82,10 +106,5 @@ function checar_empate(){
     else{
         h2.innerHTML= `O jogo empatou!`;
         }
-    comecar(()=>{
-        tela.style.display="none";
-        tela.innerHTML="";
-    });
-setTimeout(comecar,100);
 };
 
