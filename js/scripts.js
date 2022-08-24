@@ -2,6 +2,7 @@ let celulas = document.querySelectorAll(".celula");
 
 const jogador_x="x"
 const jogador_o="O"
+var checar_turno= false;
 
 
 const combinaçao=[
@@ -18,37 +19,40 @@ const combinaçao=[
 document.addEventListener('click', (e)=>{
     if(e.target.matches('.celula')){
        jogar(e.target.id);
-       bot();
+       setTimeout(()=> bot(),500);
    }
    });
 
    
-   function bot(){ 
-    const posicaoDisponivel=[];
-    for (index in celulas){
-        if(!isNaN(index)){
-            if(!celulas[index].classList.contains("X") &&
-               !celulas[index].classList.contains("O")
-            ){
-                posicaoDisponivel.push(index);
-             }
+function bot(){ 
+        const posicaoDisponivel=[];
+        for (index in celulas){
+            if(!isNaN(index)) {
+                if(!celulas[index].classList.contains("X") &&
+                 !celulas[index].classList.contains("O")
+                ){
+                    posicaoDisponivel.push(index);
+                }
+            }
         }
-    }
+    
     const aleatorio = Math.floor(
         
-    Math.random()*posicaoDisponivel.length
-    
+    Math.random()*posicaoDisponivel.length 
     );
- 
-     jogar (posicaoDisponivel[aleatorio],jogador_o);
+
+    jogar (posicaoDisponivel[aleatorio],jogador_o);
 
 };
-
-function jogar (id){
+ 
+function jogar (id, turno){
     const celula = document.getElementById(id);
-   turno = checar_turno ? jogador_x : jogador_o;
+   turno= checar_turno ?  jogador_o:jogador_x ;
+   checar_turno=!checar_turno
     celula.textContent = turno;
+    
     celula.classList.add(turno);
+    
 
     checar_ganhador(turno);
 
@@ -84,7 +88,9 @@ function checar_empate(){
              if(celulas[index].classList.contains("jogador_o")){
                  o++;
              } 
+             
         }
+    
     }
 
    return x+o=== 9 ? true : false;
@@ -99,6 +105,8 @@ function checar_empate(){
     tela.style.display="block";
     tela.appendChild(h2);
     tela.appendChild(h3);
+    
+
 
     if(vencedor){
         h2.innerHTML=`O jogador <span> ${vencedor}</span> ganhou!`;
@@ -106,5 +114,8 @@ function checar_empate(){
     else{
         h2.innerHTML= `O jogo empatou!`;
         }
+setTimeout(()=>location.reload(),500);
+       
 };
+
 
